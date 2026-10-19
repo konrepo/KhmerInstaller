@@ -1,3 +1,4 @@
+```html
 <div align="center">
   <img src="Screenshots/Icon.png" width="100" height="100" alt="KhmerInstaller Logo">
 
@@ -6,6 +7,34 @@
   <p>
     An iOS app for signing tvOS IPA packages and installing them wirelessly on a compatible Apple TV.
   </p>
+
+  <p>
+    <img src="https://img.shields.io/badge/Platform-iOS-blue" alt="iOS">
+    <img src="https://img.shields.io/badge/Target-tvOS-blue" alt="tvOS">
+    <img src="https://img.shields.io/badge/iOS-18%2B-green" alt="iOS 18+">
+    <img src="https://img.shields.io/badge/Installation-Wireless-brightgreen" alt="Wireless Installation">
+    <a href="LICENSE">
+      <img src="https://img.shields.io/badge/License-GPL--3.0-orange" alt="GPL-3.0">
+    </a>
+  </p>
+</div>
+```
+
+## Badge meanings
+
+| Badge | Description |
+|---|---|
+| Platform iOS | KhmerInstaller runs on iPhone |
+| Target tvOS | Installs applications on Apple TV |
+| iOS 18+ | Intended minimum iOS version |
+| Installation Wireless | Installs over a wireless connection |
+| License GPL-3.0 | Open-source license |
+
+The license badge will link to `LICENSE` once that file is uploaded.
+
+**Everything below your existing `## What It Does` heading stays exactly the same**, including your screenshots, tested devices, project scope, licensing, and disclaimer.
+
+I would not add a Swift version, release version, or CI badge yet because we haven't verified the relevant version or published a release or CI workflow.
 </div>
 
 ## What It Does
