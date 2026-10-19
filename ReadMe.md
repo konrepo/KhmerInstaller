@@ -86,7 +86,6 @@ KhmerInstaller is a native Swift iOS application built with Xcode.
 6. Enable **Network Extensions (Packet Tunnel)** and **App Groups** for both targets.
 7. Ensure your provisioning profiles support the required entitlements.
 8. Build and run KhmerInstaller on your iPhone.
-
 The Packet Tunnel Bundle ID is automatically derived from `APP_BUNDLE_ID`. Both targets share the configured App Group.
 
 ### Wireless Installation
