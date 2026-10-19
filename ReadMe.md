@@ -20,7 +20,6 @@
 - Prepares the signed IPA for installation on the paired Apple TV.
 - Starts installation and displays installation status and results.
 - Includes safeguards for failed or cancelled workflows and cleanup of temporary signing workspaces.
-- Provides an About screen with project information, the GPL-3.0 project license, and third-party acknowledgements and license notices.
   <h2>Screenshots</h2>
 
 <h3>Setup & Signing</h3>
