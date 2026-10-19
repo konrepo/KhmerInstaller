@@ -32,6 +32,18 @@
   <img src="Screenshots/Installation.png" width="850" alt="KhmerInstaller Wireless Installation">
 </p>
 
+## Tested Devices & Compatibility
+
+KhmerInstaller has been tested on the following devices:
+
+| Device | Operating System | Status |
+|---|---|---|
+| iPhone 15 Pro Max | iOS 18+ | ✅ Tested |
+| Apple TV 4K | tvOS 27.0 | ✅ Tested |
+| Apple TV HD | tvOS 26.6 | ✅ Tested |
+
+**Note:** Other iPhone and Apple TV models may work but have not been officially tested.
+
 ## Project Scope
 
 - KhmerInstaller is an iPhone app designed to sign and install tvOS IPAs wirelessly, directly from the phone to a compatible Apple TV.
