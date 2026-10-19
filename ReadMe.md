@@ -1,4 +1,3 @@
-```html
 <div align="center">
   <img src="Screenshots/Icon.png" width="100" height="100" alt="KhmerInstaller Logo">
 
@@ -18,7 +17,6 @@
     </a>
   </p>
 </div>
-```
 
 ## Badge meanings
 
