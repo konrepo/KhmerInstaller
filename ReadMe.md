@@ -21,16 +21,6 @@
   </p>
 </div>
 
-## Badge meanings
-
-| Badge | Description |
-|---|---|
-| Platform iOS | KhmerInstaller runs on iPhone |
-| Target tvOS | Installs applications on Apple TV |
-| iOS 18+ | Intended minimum iOS version |
-| Installation Wireless | Installs over a wireless connection |
-| License GPL-3.0 | Open-source license |
-
 ## What It Does
 
 - Runs directly on an iPhone and performs the Apple TV workflow wirelessly.
