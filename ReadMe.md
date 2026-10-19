@@ -15,6 +15,9 @@
     <a href="LICENSE">
       <img src="https://img.shields.io/badge/License-GPL--3.0-orange" alt="GPL-3.0">
     </a>
+    <a href="https://ko-fi.com/thedevilz">
+      <img src="https://img.shields.io/badge/Ko--fi-Support-FF5E5B?logo=kofi&logoColor=white" alt="Support on Ko-fi">
+    </a>
   </p>
 </div>
 
@@ -91,6 +94,14 @@ See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) and the accompanying licens
 KhmerInstaller is distributed under the **GNU General Public License, version 3 (GPL-3.0)**.
 
 See [LICENSE](LICENSE) for the full license text. Third-party components remain subject to their respective license terms.
+
+## Support KhmerInstaller
+
+KhmerInstaller is a free and open-source project.
+
+If you enjoy using KhmerInstaller and would like to support future development, consider buying me a coffee.
+
+☕ [Support TheDevilz on Ko-fi](https://ko-fi.com/thedevilz)
 
 ## Disclaimer
 
