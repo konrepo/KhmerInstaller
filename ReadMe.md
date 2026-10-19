@@ -29,13 +29,13 @@ KhmerInstaller is an iOS app for signing tvOS IPA packages and installing them o
 
 The project includes Zsign and uses Swift packages and other third-party code.
 
-See `THIRD_PARTY_NOTICES.md` and the accompanying license files for attributions and applicable license terms.
+See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) and the accompanying license files for attributions and applicable license terms.
 
 ## License
 
 KhmerInstaller is distributed under the **GNU General Public License, version 3 (GPL-3.0)**.
 
-See `LICENSE` for the full license text. Third-party components remain subject to their respective license terms.
+See [LICENSE](LICENSE) for the full license text. Third-party components remain subject to their respective license terms.
 
 ## Disclaimer
 
