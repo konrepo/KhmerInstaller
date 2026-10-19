@@ -96,6 +96,20 @@ The Packet Tunnel Bundle ID is automatically derived from `APP_BUNDLE_ID`. Both 
 
 **Note:** A Mac with Xcode is required to build KhmerInstaller from source. Once installed, signing and wireless installation work directly from your iPhone without a computer.
 
+## Signing Requirements
+
+To sign and use KhmerInstaller with your own Apple Developer signing assets, prepare:
+
+- **One `.p12` signing certificate** and its password.
+- **One main-app provisioning profile** for the KhmerInstaller iOS app.
+- **One Packet Tunnel provisioning profile** for the embedded KhmerInstaller tunnel extension.
+
+The two provisioning profiles must match their respective bundle identifiers and authorize the required signing entitlements. The signing setup must support the Packet Tunnel Network Extension capability and the App Group shared by the app and its extension.
+
+A certificate and a single provisioning profile may not be sufficient for the current app structure. Your Apple Developer team must support the capabilities required by both targets.
+
+**Note:** Successful signing and installation do not guarantee that the VPN tunnel will connect. The app, extension, provisioning profiles, entitlements, and App Group must all be compatible with the signing team.
+
 ## Project Scope
 
 - KhmerInstaller is an iPhone app designed to sign and install tvOS IPAs wirelessly, directly from the phone to a compatible Apple TV.
@@ -130,3 +144,4 @@ If you enjoy using KhmerInstaller and would like to support future development, 
 KhmerInstaller is an independent community project and is not affiliated with, endorsed by, or sponsored by Apple Inc.
 
 Use only IPA files and signing credentials that you are authorized to use.
+
