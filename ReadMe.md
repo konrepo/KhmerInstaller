@@ -71,12 +71,10 @@ KhmerInstaller is a native Swift iOS application built with Xcode.
 ### Build Instructions
 
 1. Clone the repository:
-
    ```bash
    git clone https://github.com/konrepo/KhmerInstaller.git
    cd KhmerInstaller
    ```
-
 2. Open `KunInstaller.xcodeproj` in Xcode.
 3. Select the `KunInstaller` scheme and your iPhone.
 4. Under **Signing & Capabilities**, select your Apple Developer Team for both `KunInstaller` and `KunInstallerTunnel`.
