@@ -22,6 +22,18 @@
 - Includes safeguards for failed or cancelled workflows and cleanup of temporary signing workspaces.
 - Provides an About screen with project information, the GPL-3.0 project license, and third-party acknowledgements and license notices.
 
+  <h2>Screenshots</h2>
+
+<h3>Setup & Signing</h3>
+<p align="center">
+  <img src="Screenshots/Setup.png" width="850" alt="KhmerInstaller Setup and Signing">
+</p>
+
+<h3>Wireless Apple TV Installation</h3>
+<p align="center">
+  <img src="Screenshots/Installation.png" width="850" alt="KhmerInstaller Wireless Installation">
+</p>
+
 ## Project Scope
 
 - KhmerInstaller is an iPhone app designed to sign and install tvOS IPAs wirelessly, directly from the phone to a compatible Apple TV.
