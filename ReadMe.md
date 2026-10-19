@@ -57,6 +57,48 @@ KhmerInstaller has been tested on the following devices:
 
 **Note:** Other iPhone and Apple TV models may work but have not been officially tested.
 
+## Build from Source
+
+KhmerInstaller is a native Swift iOS application built with Xcode.
+
+### Requirements
+
+- Mac with Xcode
+- iPhone running iOS 18.0 or later
+- Apple Developer account with the required signing capabilities
+- Compatible Apple TV
+
+### Build Instructions
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/konrepo/KhmerInstaller.git
+   cd KhmerInstaller
+   ```
+
+2. Open `KunInstaller.xcodeproj` in Xcode.
+3. Select the `KunInstaller` scheme and your iPhone.
+4. Under **Signing & Capabilities**, select your Apple Developer Team for both `KunInstaller` and `KunInstallerTunnel`.
+5. Configure your own identifiers in **Build Settings** for both targets:
+   - `APP_BUNDLE_ID` — Your unique application Bundle ID.
+   - `APP_GROUP_ID` — Your registered App Group identifier.
+6. Enable **Network Extensions (Packet Tunnel)** and **App Groups** for both targets.
+7. Ensure your provisioning profiles support the required entitlements.
+8. Build and run KhmerInstaller on your iPhone.
+
+The Packet Tunnel Bundle ID is automatically derived from `APP_BUNDLE_ID`. Both targets share the configured App Group.
+
+### Wireless Installation
+
+1. Connect your iPhone and Apple TV to the same local network.
+2. Pair KhmerInstaller with your Apple TV.
+3. Import your signing certificate and provisioning profile.
+4. Select and sign a compatible tvOS IPA.
+5. Install the signed IPA wirelessly on Apple TV.
+
+**Note:** A Mac with Xcode is required to build KhmerInstaller from source. Once installed, signing and wireless installation work directly from your iPhone without a computer.
+
 ## Project Scope
 
 - KhmerInstaller is an iPhone app designed to sign and install tvOS IPAs wirelessly, directly from the phone to a compatible Apple TV.
