@@ -1,6 +1,12 @@
-# KhmerInstaller
+<div align="center">
+  <img src="Screenshots/Icon.png" width="100" height="100" alt="KhmerInstaller Logo">
 
-KhmerInstaller is an iOS app for signing tvOS IPA packages and installing them on a compatible Apple TV.
+  <h1>KhmerInstaller</h1>
+
+  <p>
+    An iOS app for signing tvOS IPA packages and installing them wirelessly on a compatible Apple TV.
+  </p>
+</div>
 
 ## What It Does
 
