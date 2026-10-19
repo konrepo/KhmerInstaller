@@ -31,13 +31,6 @@
 | Installation Wireless | Installs over a wireless connection |
 | License GPL-3.0 | Open-source license |
 
-The license badge will link to `LICENSE` once that file is uploaded.
-
-**Everything below your existing `## What It Does` heading stays exactly the same**, including your screenshots, tested devices, project scope, licensing, and disclaimer.
-
-I would not add a Swift version, release version, or CI badge yet because we haven't verified the relevant version or published a release or CI workflow.
-</div>
-
 ## What It Does
 
 - Runs directly on an iPhone and performs the Apple TV workflow wirelessly.
