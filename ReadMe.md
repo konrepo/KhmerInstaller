@@ -102,10 +102,8 @@ The Packet Tunnel Bundle ID is automatically derived from `APP_BUNDLE_ID`. Both 
 ## Signing Requirements
 
 KhmerInstaller contains two separately signed targets:
-
 - **Main iOS app** → Main App provisioning profile
 - **Packet Tunnel extension** → Packet Tunnel provisioning profile
-
 Both targets can use the same signing certificate.
 
 ### Required to Build and Run KhmerInstaller
