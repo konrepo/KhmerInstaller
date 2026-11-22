@@ -37,6 +37,8 @@ struct ContentView: View {
     @State private var packetTunnelManager:
         NETunnelProviderManager?
 
+    @State private var vpnStatus: NEVPNStatus = .invalid
+
     @State private var installationStatus =
         "Idle"
 
@@ -253,9 +255,7 @@ struct ContentView: View {
                                             }
                                         }
                                         .disabled(
-                                            packetTunnelManager?
-                                                .connection
-                                                .status != .connected
+                                            vpnStatus != .connected
                                         )
                                     }
                                 }
@@ -289,8 +289,7 @@ struct ContentView: View {
                             installationProgress: installationProgress,
                             installationInProgress: installationInProgress,
                             appleTVConnected:
-                                packetTunnelManager?.connection.status
-                                    == .connected,
+                                vpnStatus == .connected,
                             onInstall: {
                                 Task {
                                     await installSelectedIPA()
@@ -371,6 +370,18 @@ struct ContentView: View {
                 Button("Keep Installing", role: .cancel) {}
             } message: {
                 Text("The Apple TV installation will be stopped. Wait for cancellation before reconnecting or retrying.")
+            }
+            .onReceive(
+                NotificationCenter.default.publisher(
+                    for: .NEVPNStatusDidChange
+                )
+            ) { notification in
+                guard let manager = packetTunnelManager,
+                      let connection = notification.object as? NEVPNConnection,
+                      connection === manager.connection else {
+                    return
+                }
+                vpnStatus = connection.status
             }
             .task {
                 startBrowsing()
@@ -1475,6 +1486,8 @@ struct ContentView: View {
 
         packetTunnelManager =
             manager
+
+        vpnStatus = manager.connection.status
 
 
 
