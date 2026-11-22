@@ -1,0 +1,42 @@
+{
+  "originHash" : "7b9b155a0d311aebbb6d3b21ab27b84bc857f3a1117596422fd00918cef79f43",
+  "pins" : [
+    {
+      "identity" : "bigint",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/attaswift/BigInt.git",
+      "state" : {
+        "revision" : "e07e00fa1fd435143a2dcf8b7eec9a7710b2fdfe",
+        "version" : "5.7.0"
+      }
+    },
+    {
+      "identity" : "openssl",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/krzyzanowskim/OpenSSL",
+      "state" : {
+        "revision" : "0a6149bff4fb00921ce0ec1811f726b166638095",
+        "version" : "3.6.5000"
+      }
+    },
+    {
+      "identity" : "srp",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Bouke/SRP",
+      "state" : {
+        "revision" : "c01934477cb0aa14b4da5c3cb61d447bd6393ce0",
+        "version" : "3.2.1"
+      }
+    },
+    {
+      "identity" : "swift-crypto",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-crypto.git",
+      "state" : {
+        "revision" : "ddb07e896a2a8af79512543b1c7eb9797f8898a5",
+        "version" : "1.1.7"
+      }
+    }
+  ],
+  "version" : 3
+}

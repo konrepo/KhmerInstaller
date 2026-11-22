@@ -1,0 +1,44 @@
+# Xcode
+DerivedData/
+build/
+*.xcuserstate
+xcuserdata/
+*.xcscmblueprint
+
+# Swift Package Manager
+.build/
+Packages/
+
+# Archives / exports
+*.xcarchive
+*.ipa
+
+# Signing / provisioning
+*.p12
+*.mobileprovision
+*.cer
+*.der
+
+# macOS
+.DS_Store
+
+# Local logs / diagnostics
+*.log
+
+# JetBrains / IDE metadata
+.idea/
+
+# Local project backups
+*.bak
+*.backup
+*.before-*
+*.srp-backup
+
+# Additional signing credentials - never commit
+*.pfx
+*.provisionprofile
+*.p8
+*.key
+
+# Xcode user-specific state (any directory)
+**/xcuserdata/
