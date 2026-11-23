@@ -104,6 +104,47 @@ Both targets can use the same certificate. Provisioning profiles must match thei
 
 **Important:** The Packet Tunnel may fail to connect if its capabilities, entitlements, or provisioning configuration are incorrect, even if the app installs successfully.
 
+### Sign KhmerInstaller IPA from Terminal
+
+KhmerInstaller includes a macOS Terminal signing script for signing
+the unsigned IPA without opening Xcode.
+
+**Requirements:**
+
+- macOS with Xcode Command Line Tools.
+- One compatible Apple signing certificate.
+- Two provisioning profiles:
+  - Main iOS application profile.
+  - Packet Tunnel extension profile.
+- Both profiles must authorize the required Network Extension
+  capability and a common App Group.
+
+**Run:**
+
+    bash Scripts/sign-ipa.sh
+
+**Signing options:**
+
+1. Import a `.p12` certificate into a temporary Keychain.
+2. Use an existing macOS Keychain signing identity.
+
+The script derives the Bundle IDs and shared App Group from the
+provisioning profiles and signs the OpenSSL framework, Packet Tunnel
+extension, and main application.
+
+**Output:**
+
+- `KhmerInstaller-Signed-P12.ipa`
+- `KhmerInstaller-Signed-Keychain.ipa`
+
+The original unsigned IPA is preserved.
+
+**Important:** Use only authorized signing credentials.
+Never upload certificates, private keys, or passwords to GitHub.
+
+Signing and signature verification have been tested. Installation
+and runtime behavior with other developer accounts remain unverified.
+
 ### Signing tvOS IPAs
 
 The signing credentials used for KhmerInstaller are separate from those required for tvOS IPAs.
