@@ -39,12 +39,6 @@
   <img src="Screenshots/Setup.png" width="850" alt="KhmerInstaller Setup and Signing">
 </p>
 
-### Terminal IPA Signing
-
-<p align="center">
-  <img src="Screenshots/TerminalSigning.png" width="850" alt="KhmerInstaller Terminal IPA Signing Tool">
-</p>
-
 ### Wireless Apple TV Installation
 
 <p align="center">
@@ -128,6 +122,10 @@ the unsigned IPA without opening Xcode.
 **Run:**
 
     bash Scripts/sign-ipa.sh
+
+<p align="center">
+  <img src="Screenshots/TerminalSigning.png" width="850" alt="KhmerInstaller Terminal IPA Signing Tool">
+</p>
 
 **Signing options:**
 
