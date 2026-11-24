@@ -1,0 +1,120 @@
+{
+  "schemaVersion": 1,
+  "platform": "tvOS",
+  "apps": [
+    {
+      "id": "vortx",
+      "name": "VortX",
+      "description": "A native streaming application for Apple TV.",
+      "version": "0.5.7",
+      "category": "Entertainment",
+      "source": "GitHub Releases",
+      "sourceURL": "https://github.com/VortXTV/VortX",
+      "iconURL": "https://raw.githubusercontent.com/konrepo/KhmerInstaller/main/AppLibrary/Icons/VortX.png",
+      "variants": [
+        {
+          "id": "full",
+          "name": "Full",
+          "fileName": "VortX-tvOS-v0.5.7-ci.ipa",
+          "ipaURL": "https://github.com/VortXTV/VortX/releases/download/v0.5.7/VortX-tvOS-v0.5.7-ci.ipa"
+        },
+        {
+          "id": "lite",
+          "name": "Lite",
+          "fileName": "VortX-tvOS-lite-v0.5.7-ci.ipa",
+          "ipaURL": "https://github.com/VortXTV/VortX/releases/download/v0.5.7/VortX-tvOS-lite-v0.5.7-ci.ipa"
+        }
+      ]
+    },
+    {
+      "id": "stremio",
+      "name": "Stremio",
+      "description": "Video streaming and media organization for Apple TV.",
+      "version": "2.1.1b25",
+      "category": "Entertainment",
+      "source": "Official Download",
+      "sourceURL": "https://www.stremio.com",
+      "iconURL": "https://raw.githubusercontent.com/konrepo/KhmerInstaller/main/AppLibrary/Icons/Stremio.png",
+      "variants": [
+        {
+          "id": "standard",
+          "name": "Standard",
+          "fileName": "stremio_tvOS.ipa",
+          "ipaURL": "https://dl.strem.io/apple/2.1.1b25/tvos/stremio_tvOS.ipa"
+        }
+      ]
+    },
+    {
+      "id": "nuvio",
+      "name": "Nuvio TV",
+      "description": "Media player application for Apple TV.",
+      "version": "3.5.2",
+      "category": "Entertainment",
+      "source": "GitHub Releases",
+      "sourceURL": "https://github.com/bobsupra/NuvioTVOS",
+      "iconURL": "https://raw.githubusercontent.com/konrepo/KhmerInstaller/main/AppLibrary/Icons/Nuvio.png",
+      "variants": [
+        {
+          "id": "standard",
+          "name": "Standard",
+          "fileName": "NuvioTV-3.5.2-unsigned-release.ipa",
+          "ipaURL": "https://github.com/bobsupra/NuvioTVOS/releases/download/tvos-beta-3.5.2/NuvioTV-3.5.2-unsigned-release.ipa"
+        }
+      ]
+    },
+    {
+      "id": "orivio",
+      "name": "Orivio TV",
+      "description": "Apple TV streaming application.",
+      "version": "0.17",
+      "category": "Entertainment",
+      "source": "GitHub Releases",
+      "sourceURL": "https://github.com/prehakanson-art/OrivioTVAppleTV",
+      "iconURL": "https://raw.githubusercontent.com/konrepo/KhmerInstaller/main/AppLibrary/Icons/Orivio.png",
+      "variants": [
+        {
+          "id": "standard",
+          "name": "Standard",
+          "fileName": "OrivioTV-V0.17.Sideloadly.ipa",
+          "ipaURL": "https://github.com/prehakanson-art/OrivioTVAppleTV/releases/download/v0.17/OrivioTV-V0.17.Sideloadly.ipa"
+        }
+      ]
+    },
+    {
+      "id": "mutube",
+      "name": "MuTube",
+      "description": "Alternative video client for Apple TV.",
+      "version": "4.54.01",
+      "category": "Entertainment",
+      "source": "File Garden",
+      "sourceURL": null,
+      "iconURL": "https://raw.githubusercontent.com/konrepo/KhmerInstaller/main/AppLibrary/Icons/MuTube.png",
+      "variants": [
+        {
+          "id": "hdr",
+          "name": "HDR",
+          "fileName": "mutube_4.54.01_hdr.ipa",
+          "ipaURL": "https://file.garden/aGfhNpTdVktTM-Pp/mutube_4.54.01_hdr.ipa"
+        }
+      ]
+    },
+    {
+      "id": "orbrisa",
+      "name": "Orbrisa Web",
+      "description": "Web browser for Apple TV with web apps, favorites, and ad blocking.",
+      "version": "1.1.0-beta.2",
+      "category": "Browser",
+      "source": "GitHub Releases",
+      "sourceURL": "https://github.com/fdm96/Orbrisa",
+      "iconURL": "https://raw.githubusercontent.com/konrepo/KhmerInstaller/main/AppLibrary/Icons/Orbrisa.png",
+      "variants": [
+        {
+          "id": "standard",
+          "name": "Standard",
+          "fileName": "Orbrisa-1.1.0-Beta-2-unsigned.ipa",
+          "ipaURL": "https://github.com/fdm96/Orbrisa/releases/download/v1.1.0-beta.2/Orbrisa-1.1.0-Beta-2-unsigned.ipa"
+        }
+      ]
+    }
+  ]
+}
