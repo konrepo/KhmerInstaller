@@ -286,7 +286,7 @@ NSDictionary<NSString *, id> * KIInspectIPA(NSString *ipaPath) {
     unz_global_info64 globalInfo = {};
     if (unzGetGlobalInfo64(archive, &globalInfo) != UNZ_OK ||
         globalInfo.number_entry == 0 ||
-        globalInfo.number_entry > 10000) {
+        globalInfo.number_entry > 50000) {
         unzClose(archive);
         return nil;
     }
@@ -498,7 +498,7 @@ BOOL KIExtractIPA(NSString *ipaPath, NSString *outputPath) {
     unz_global_info64 globalInfo = {};
     if (unzGetGlobalInfo64(archive, &globalInfo) != UNZ_OK ||
         globalInfo.number_entry == 0 ||
-        globalInfo.number_entry > 10000) {
+        globalInfo.number_entry > 50000) {
         unzClose(archive);
         return NO;
     }
@@ -1155,7 +1155,7 @@ BOOL KIPackageIPA(NSString *sourceDirectory, NSString *destinationIPA) {
             totalSize += length;
         }
 
-        if (entries.count >= 10000) {
+        if (entries.count >= 50000) {
             return NO;
         }
 

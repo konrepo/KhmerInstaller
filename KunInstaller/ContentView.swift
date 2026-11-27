@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 import ZsignC
 import CryptoKit
 import Network
@@ -14,6 +15,10 @@ struct PairingDevice: Identifiable, Hashable {
 }
 
 struct ContentView: View {
+
+    // KI_FOUR_TAB_NAVIGATION
+    @EnvironmentObject private var ipaHandoff: TVOSIPAHandoff
+    @State private var selectedTab = 0
 
     @State private var devices: [PairingDevice] = []
 
@@ -44,6 +49,10 @@ struct ContentView: View {
 
     @State private var installationDetail =
         "Wait for installation to be completed ."
+
+    // KI_ADVANCED_RSD_DIAGNOSTICS
+    @State private var showAdvancedDiagnostics = false
+    @State private var rsdDebugText = "No RSD debug data yet."
 
     @State private var installationProgress:
         Double?
@@ -83,7 +92,8 @@ struct ContentView: View {
 
     var body: some View {
 
-        NavigationStack {
+        TabView(selection: $selectedTab) {
+            NavigationStack {
 
             List {
 
@@ -267,62 +277,52 @@ struct ContentView: View {
                         }
                     }
                 }
-                Section("3. Certificates") {
-                    NavigationLink {
-                        CertificatesView()
-                    } label: {
-                        Label(
-                            "Certificates",
-                            systemImage: "checkmark.seal"
-                        )
-                    }
-                }
-
-                Section("4. Sign tvOS IPA") {
-                    NavigationLink {
-                        IPASigningView(
-                            onSignedIPAReady: { url in
-                                prepareSignedIPAForInstallation(url)
-                            },
-                            installationStatus: installationStatus,
-                            installationDetail: installationDetail,
-                            installationProgress: installationProgress,
-                            installationInProgress: installationInProgress,
-                            appleTVConnected:
-                                vpnStatus == .connected,
-                            onInstall: {
-                                Task {
-                                    await installSelectedIPA()
-                                }
-                            }
-                        )
-                        // KI_CANCEL_BUTTON_SIGNING_ONLY
-                        .safeAreaInset(edge: .bottom) {
-                            if installationInProgress,
-                               activeInstallationID != nil,
-                               !cancellationRequestInProgress,
-                               ["Starting installation", "Preparing installation",
-                                "Uploading IPA", "Installing", "Verifying"].contains(installationStatus) {
-                                Button(role: .destructive) {
-                                    showingCancelConfirmation = true
+                Section {
+                    DisclosureGroup(
+                        "Advanced RSD Diagnostics",
+                        isExpanded: $showAdvancedDiagnostics
+                    ) {
+                        VStack(alignment: .leading, spacing: 10) {
+                            HStack {
+                                Button {
+                                    readRSDDebug()
                                 } label: {
-                                    Label("Cancel Installation", systemImage: "xmark.circle")
-                                        .frame(maxWidth: .infinity)
+                                    Label("Refresh", systemImage: "arrow.clockwise")
                                 }
-                                .buttonStyle(.borderedProminent)
-                                .padding(.horizontal)
-                                .padding(.vertical, 8)
+
+                                Spacer()
+
+                                Button {
+                                    UIPasteboard.general.string = rsdDebugText
+                                } label: {
+                                    Label("Copy Log", systemImage: "doc.on.doc")
+                                }
+                                .disabled(rsdDebugText.isEmpty)
                             }
+
+                            ScrollView {
+                                Text(rsdDebugText)
+                                    .font(.system(.footnote, design: .monospaced))
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .textSelection(.enabled)
+                                    .padding(8)
+                            }
+                            .frame(minHeight: 180, maxHeight: 400)
+                            .background(.secondary.opacity(0.08))
+                            .clipShape(RoundedRectangle(cornerRadius: 8))
                         }
-                    } label: {
-                        Label(
-                            "Sign tvOS IPA",
-                            systemImage: "signature"
-                        )
+                        .padding(.vertical, 6)
                     }
+                    .onChange(of: showAdvancedDiagnostics) { _, expanded in
+                        if expanded {
+                            readRSDDebug()
+                        }
+                    }
+                } header: {
+                    Text("Advanced")
                 }
 
-                Section("5. About") {
+                Section("About") {
                     NavigationLink {
                         KhmerInstallerAboutView()
                     } label: {
@@ -359,6 +359,76 @@ struct ContentView: View {
 
             .navigationTitle("KhmerInstaller")
             }
+            .tabItem {
+                Label("Pair", systemImage: "appletv")
+            }
+            .tag(0)
+
+            NavigationStack {
+                CertificatesView()
+                    .navigationTitle("Certificates")
+            }
+            .tabItem {
+                Label("Certificates", systemImage: "checkmark.seal")
+            }
+            .tag(1)
+
+            NavigationStack {
+                TVOSAppsView()
+                    .environmentObject(ipaHandoff)
+            }
+            .tabItem {
+                Label("App Library", systemImage: "square.grid.2x2")
+            }
+            .tag(2)
+
+            NavigationStack {
+                IPASigningView(
+                    onSignedIPAReady: { url in
+                        prepareSignedIPAForInstallation(url)
+                    },
+                    initialIPAURL: ipaHandoff.pendingIPAURL,
+                    onInitialIPAImported: { url in
+                        ipaHandoff.completeImport(url)
+                    },
+                    installationStatus: installationStatus,
+                    installationDetail: installationDetail,
+                    installationProgress: installationProgress,
+                    installationInProgress: installationInProgress,
+                    appleTVConnected: vpnStatus == .connected,
+                    onInstall: {
+                        Task {
+                            await installSelectedIPA()
+                        }
+                    }
+                )
+                .safeAreaInset(edge: .bottom) {
+                    if installationInProgress,
+                       activeInstallationID != nil,
+                       !cancellationRequestInProgress,
+                       ["Starting installation", "Preparing installation",
+                        "Uploading IPA", "Installing", "Verifying"]
+                            .contains(installationStatus) {
+                        Button(role: .destructive) {
+                            showingCancelConfirmation = true
+                        } label: {
+                            Label(
+                                "Cancel Installation",
+                                systemImage: "xmark.circle"
+                            )
+                            .frame(maxWidth: .infinity)
+                        }
+                        .buttonStyle(.borderedProminent)
+                        .padding(.horizontal)
+                        .padding(.vertical, 8)
+                    }
+                }
+            }
+            .tabItem {
+                Label("Sign", systemImage: "signature")
+            }
+            .tag(3)
+        }
             .confirmationDialog(
                 "Cancel current installation?",
                 isPresented: $showingCancelConfirmation,
@@ -385,6 +455,14 @@ struct ContentView: View {
             }
             .task {
                 startBrowsing()
+            }
+            .onChange(of: ipaHandoff.requestID) { _, requestID in
+                guard requestID != nil,
+                      ipaHandoff.pendingIPAURL != nil else {
+                    return
+                }
+
+                selectedTab = 3
             }
     }
 
@@ -857,7 +935,9 @@ struct ContentView: View {
             Task { @MainActor in
 
                 // KI_INSTALL_MONITOR_TIMEOUT
-                let deadline = Date().addingTimeInterval(600)
+                // KI_INSTALL_MONITOR_TIMEOUT
+                // Allow sufficient time for upload and Apple TV installation.
+                let deadline = Date().addingTimeInterval(900)
 
                 while !Task.isCancelled {
 
@@ -947,6 +1027,32 @@ struct ContentView: View {
 
 
 
+    // KI_RESTORED_RSD_DEBUG_READER
+    private func readRSDDebug() {
+        guard let container = FileManager.default.containerURL(
+            forSecurityApplicationGroupIdentifier:
+                KhmerInstallerConfig.appGroupID
+        ) else {
+            rsdDebugText = "App Group unavailable."
+            return
+        }
+
+        let url = container.appendingPathComponent("remotexpc-debug.txt")
+
+        do {
+            rsdDebugText = try String(
+                contentsOf: url,
+                encoding: .utf8
+            )
+
+            if rsdDebugText.isEmpty {
+                rsdDebugText = "RSD debug log is empty."
+            }
+        } catch {
+            rsdDebugText = "Unable to read RSD debug log: \(error.localizedDescription)"
+        }
+    }
+
     @MainActor
     private func installSelectedIPA() async {
 
@@ -1001,6 +1107,8 @@ struct ContentView: View {
         // installation log before starting the monitor.
         do {
 
+            NSLog("KI_INSTALL_IPC: sending install request")
+
             let response =
                 try await withCheckedThrowingContinuation {
                     (
@@ -1015,6 +1123,15 @@ struct ContentView: View {
                                 "KunInstaller Install IPA".utf8
                             )
                         ) { response in
+
+                            let callbackText = response.flatMap {
+                                String(data: $0, encoding: .utf8)
+                            } ?? "<nil>"
+
+                            NSLog(
+                                "KI_INSTALL_IPC: callback response=%@",
+                                callbackText as NSString
+                            )
 
                             continuation.resume(
                                 returning:

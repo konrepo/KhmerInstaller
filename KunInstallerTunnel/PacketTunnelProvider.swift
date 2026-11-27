@@ -611,10 +611,21 @@ final class PacketTunnelProvider: NEPacketTunnelProvider {
 
     // KI_TUNNEL_STREAMING_SHA256
     private static func sha256ForIPA(_ url: URL) throws -> String {
+        let started = Date()
+
+        let attributes = try FileManager.default.attributesOfItem(
+            atPath: url.path
+        )
+        let fileSize = (attributes[.size] as? NSNumber)?.int64Value ?? -1
+
+        NSLog("KI_SHA256: BEGIN sizeBytes=%lld", fileSize)
+
         let handle = try FileHandle(forReadingFrom: url)
         defer { try? handle.close() }
 
         var hasher = SHA256()
+        var processed: Int64 = 0
+        var nextReport: Int64 = 64 * 1024 * 1024
 
         while true {
             let chunk = try handle.read(upToCount: 1024 * 1024)
@@ -625,11 +636,29 @@ final class PacketTunnelProvider: NEPacketTunnelProvider {
             }
 
             hasher.update(data: chunk)
+            processed += Int64(chunk.count)
+
+            if processed >= nextReport {
+                NSLog(
+                    "KI_SHA256: PROGRESS bytes=%lld elapsed=%.1fs",
+                    processed,
+                    Date().timeIntervalSince(started)
+                )
+                nextReport = processed + 64 * 1024 * 1024
+            }
         }
 
-        return hasher.finalize()
+        let digest = hasher.finalize()
             .map { String(format: "%02x", $0) }
             .joined()
+
+        NSLog(
+            "KI_SHA256: COMPLETE bytes=%lld elapsed=%.1fs",
+            processed,
+            Date().timeIntervalSince(started)
+        )
+
+        return digest
     }
 
     // KI_INSTALL_IDENTITY_PREFLIGHT
@@ -645,7 +674,10 @@ final class PacketTunnelProvider: NEPacketTunnelProvider {
     private func validatedInstallationIdentity() throws
         -> InstallationIdentity {
 
+        writeRSDDebug("IDENTITY_CHECK: BEGIN")
+
         let fm = FileManager.default
+        writeRSDDebug("IDENTITY_CHECK: APP_GROUP_LOOKUP")
 
         guard let container = fm.containerURL(
             forSecurityApplicationGroupIdentifier:
@@ -661,6 +693,8 @@ final class PacketTunnelProvider: NEPacketTunnelProvider {
             )
         }
 
+        writeRSDDebug("IDENTITY_CHECK: APP_GROUP_READY")
+
         let selectionURL = container.appendingPathComponent(
             "selected-ipa.txt"
         )
@@ -669,12 +703,22 @@ final class PacketTunnelProvider: NEPacketTunnelProvider {
             "selected-ipa-metadata.json"
         )
 
+        writeRSDDebug("IDENTITY_CHECK: SELECTION_FILE_READ_BEGIN")
+
         let selectedFilename = try String(
             contentsOf: selectionURL,
             encoding: .utf8
         ).trimmingCharacters(in: .whitespacesAndNewlines)
 
+        writeRSDDebug("IDENTITY_CHECK: SELECTION_FILE_READ_OK")
+
+        writeRSDDebug("IDENTITY_CHECK: METADATA_READ_BEGIN")
+
         let metadataData = try Data(contentsOf: metadataURL)
+
+        writeRSDDebug(
+            "IDENTITY_CHECK: METADATA_READ_OK bytes=\(metadataData.count)"
+        )
 
         guard let metadata = try JSONSerialization.jsonObject(
             with: metadataData
@@ -704,6 +748,10 @@ final class PacketTunnelProvider: NEPacketTunnelProvider {
             )
         }
 
+        writeRSDDebug(
+            "IDENTITY_CHECK: METADATA_VALID bundleID=\(bundleID) filename=\(filename)"
+        )
+
         let directory = container.appendingPathComponent(
             "IPA",
             isDirectory: true
@@ -729,19 +777,13 @@ final class PacketTunnelProvider: NEPacketTunnelProvider {
             )
         }
 
-        // KI_INSTALL_SHA256_PREFLIGHT
-        let actualSHA256 = try Self.sha256ForIPA(ipaURL)
+        writeRSDDebug("IDENTITY_CHECK: IPA_FILE_VALID")
 
-        guard actualSHA256 == expectedSHA256 else {
-            throw NSError(
-                domain: "KhmerInstaller.Install",
-                code: 304,
-                userInfo: [
-                    NSLocalizedDescriptionKey:
-                        "Selected IPA integrity verification failed."
-                ]
-            )
-        }
+        // KI_INSTALL_SHA256_DEFERRED_TO_UPLOAD
+        // The AFC upload worker hashes the exact bytes it streams
+        // and compares them with the main app's expected SHA-256.
+        // Avoid hashing the entire IPA synchronously before IPC acknowledgment.
+        writeRSDDebug("IDENTITY_CHECK: SHA256_DEFERRED_TO_UPLOAD")
 
         // KI_UNIQUE_INSTALLATION_ATTEMPT
         // Generate a new identity for every Install request.
@@ -903,9 +945,11 @@ final class PacketTunnelProvider: NEPacketTunnelProvider {
                 "ipa-upload-complete.txt"
             )
 
+        // KI_AFC_UPLOAD_COMPLETION_TIMEOUT
+        // Allow large IPA uploads to finish before reporting timeout.
         let deadline =
             Date().addingTimeInterval(
-                180
+                600
             )
 
         while Date() < deadline {
@@ -1016,9 +1060,41 @@ final class PacketTunnelProvider: NEPacketTunnelProvider {
         )
     }
 
-    // Retained as a compatibility stub while protocol instrumentation is removed.
-    // Does not write diagnostic files or expose sensitive payloads.
-    private func writeRSDDebug(_ message: String) {}
+    // KI_RESTORED_RSD_DEBUG_WRITER
+    // Write bounded diagnostics to the shared App Group.
+    // Never log credentials, private keys, or pairing secrets.
+    private func writeRSDDebug(_ message: String) {
+        guard let container = FileManager.default.containerURL(
+            forSecurityApplicationGroupIdentifier:
+                KhmerInstallerConfig.appGroupID
+        ) else {
+            return
+        }
+
+        let url = container.appendingPathComponent(
+            "remotexpc-debug.txt"
+        )
+
+        let timestamp = ISO8601DateFormatter().string(from: Date())
+        let entry = "[\(timestamp)] \(message)\n"
+
+        do {
+            var existing = (try? String(contentsOf: url, encoding: .utf8)) ?? ""
+            existing += entry
+
+            if existing.utf8.count > 1_000_000 {
+                existing = String(existing.suffix(800_000))
+            }
+
+            try existing.write(
+                to: url,
+                atomically: true,
+                encoding: .utf8
+            )
+        } catch {
+            NSLog("KhmerInstaller: Unable to write RSD diagnostic: \(error.localizedDescription)")
+        }
+    }
 
     private func extractInstallationProxyPort(
         from summary: String
@@ -3578,7 +3654,7 @@ final class PacketTunnelProvider: NEPacketTunnelProvider {
         }
 
         let chunkSize =
-            32 * 1024
+            64 * 1024
 
         var packetNumber: UInt64 =
             101
@@ -3758,11 +3834,9 @@ final class PacketTunnelProvider: NEPacketTunnelProvider {
                     chunk.count
                 )
 
-            writeRSDDebug(
-                "IPA_UPLOAD_PROGRESS=\(written)/\(sourceSize)"
-            )
-
             // KI_AFC_JSON_UPLOAD_PROGRESS
+            // Update diagnostic and UI progress only when the
+            // integer percentage changes, not for every AFC packet.
             if sourceSize > 0 {
                 let percent = Int(
                     min(
@@ -3772,6 +3846,10 @@ final class PacketTunnelProvider: NEPacketTunnelProvider {
                 )
 
                 if percent != lastPublishedPercent {
+                    writeRSDDebug(
+                        "IPA_UPLOAD_PROGRESS=\(written)/\(sourceSize) percent=\(percent)"
+                    )
+
                     let published = publishInstallationStatus(
                         installationID: selectionID,
                         phase: "uploading",
@@ -5201,6 +5279,9 @@ final class PacketTunnelProvider: NEPacketTunnelProvider {
                 encoding: .utf8
             ) ?? ""
 
+        if message == "KunInstaller Install IPA" {
+            writeRSDDebug("INSTALL_MESSAGE_RECEIVED")
+        }
 
         guard let completionHandler else {
 
@@ -5287,6 +5368,8 @@ final class PacketTunnelProvider: NEPacketTunnelProvider {
 
         } else if message == "KunInstaller Install IPA" {
 
+            writeRSDDebug("INSTALL_BRANCH_ENTERED")
+
             guard
                 let address = currentRSDAddress,
                 let port = currentRSDPort
@@ -5306,16 +5389,22 @@ final class PacketTunnelProvider: NEPacketTunnelProvider {
                 return
             }
 
+            writeRSDDebug(
+                "INSTALL_ENDPOINT_READY address=\(address) port=\(port)"
+            )
+
             // KI_INSTALL_IDENTITY_COMMAND_PREFLIGHT
             // Reject missing or inconsistent IPA selection metadata.
             let installationIdentity: InstallationIdentity
+
+            writeRSDDebug("INSTALL_IDENTITY_VALIDATION_BEGIN")
 
             do {
                 installationIdentity =
                     try validatedInstallationIdentity()
             } catch {
                 writeRSDDebug(
-                    "INSTALL_COMMAND_REJECTED invalid_identity"
+                    "INSTALL_COMMAND_REJECTED invalid_identity reason=\(error.localizedDescription)"
                 )
 
                 completionHandler(
@@ -5326,10 +5415,15 @@ final class PacketTunnelProvider: NEPacketTunnelProvider {
                 return
             }
 
+            writeRSDDebug("INSTALL_IDENTITY_VALIDATED bundleID=\(installationIdentity.bundleID)")
+
             // KI_INSTALL_SESSION_ADMISSION
+            writeRSDDebug("INSTALL_SESSION_ADMISSION_BEGIN")
+
             guard beginInstallationSession(
                 installationIdentity.installationID
             ) else {
+                writeRSDDebug("INSTALL_SESSION_ADMISSION_FAILED already_active")
                 completionHandler(
                     Data(
                         "ERROR: Another installation is already in progress.".utf8
@@ -5338,8 +5432,12 @@ final class PacketTunnelProvider: NEPacketTunnelProvider {
                 return
             }
 
+            writeRSDDebug("INSTALL_SESSION_ADMISSION_PASSED")
+
             // KI_INITIAL_INSTALL_STATUS
             // Create the status record before starting RSD.
+            writeRSDDebug("INSTALL_STATUS_PUBLISH_BEGIN")
+
             guard publishInstallationStatus(
                 installationID: installationIdentity.installationID,
                 phase: "preparing",
@@ -5347,6 +5445,8 @@ final class PacketTunnelProvider: NEPacketTunnelProvider {
                 detail: "Preparing Apple TV services...",
                 terminal: false
             ) else {
+                writeRSDDebug("INSTALL_STATUS_PUBLISH_FAILED")
+
                 finishInstallationSession(
                     installationIdentity.installationID
                 )
@@ -5359,6 +5459,8 @@ final class PacketTunnelProvider: NEPacketTunnelProvider {
                 return
             }
 
+            writeRSDDebug("INSTALL_STATUS_PUBLISH_PASSED")
+
             writeRSDDebug(
                 "INSTALL_IDENTITY_VALIDATED selectionID=\(installationIdentity.installationID) bundleID=\(installationIdentity.bundleID)"
             )
@@ -5370,14 +5472,20 @@ final class PacketTunnelProvider: NEPacketTunnelProvider {
 
             // KI_INSTALL_IDENTITY_CAPTURE
             // Pass the validated identity into this installation attempt.
+            writeRSDDebug("INSTALL_RSD_PROBE_BEGIN")
+
             startRSDProbe(
                 address: address,
                 port: port,
                 installationIdentity: installationIdentity
             )
 
+            writeRSDDebug("INSTALL_RSD_PROBE_RETURNED")
+
             // KI_INSTALL_ATTEMPT_ACK_RESPONSE
             // Return the unique installation-attempt identifier.
+            writeRSDDebug("INSTALL_ACK_SENDING")
+
             completionHandler(
                 Data(
                     (
@@ -5386,6 +5494,8 @@ final class PacketTunnelProvider: NEPacketTunnelProvider {
                     ).utf8
                 )
             )
+
+            writeRSDDebug("INSTALL_ACK_SENT")
 
         } else {
 

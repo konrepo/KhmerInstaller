@@ -724,6 +724,80 @@ struct IPASigningCoordinator {
         return validated
     }
 
+    // KI_REUSABLE_WILDCARD_PROFILE_MATCHING
+    private static func selectProfileIndex(
+        profiles: [(url: URL, profile: SigningCredentialValidator.ProvisioningInfo)],
+        bundleID: String,
+        allowExplicitProfileFallback: Bool = false
+    ) throws -> Int {
+        let exact = profiles.indices.filter { index in
+            let profile = profiles[index].profile
+            return profile.applicationIdentifier ==
+                profile.teamID + "." + bundleID
+        }
+
+        if exact.count == 1 { return exact[0] }
+        guard exact.isEmpty else {
+            throw IPASigningError.duplicateProvisioningProfile
+        }
+
+        var candidates: [(index: Int, length: Int)] = []
+
+        for index in profiles.indices {
+            let profile = profiles[index].profile
+            let prefix = profile.teamID + "."
+
+            guard profile.applicationIdentifier.hasPrefix(prefix) else {
+                continue
+            }
+
+            let pattern = String(
+                profile.applicationIdentifier.dropFirst(prefix.count)
+            )
+
+            let allowedPrefix: String
+
+            if pattern == "*" {
+                allowedPrefix = ""
+            } else if pattern.hasSuffix(".*") {
+                allowedPrefix = String(pattern.dropLast())
+            } else {
+                continue
+            }
+
+            guard bundleID.hasPrefix(allowedPrefix),
+                  bundleID.count > allowedPrefix.count else {
+                continue
+            }
+
+            candidates.append((index, allowedPrefix.count))
+        }
+
+        guard let longest = candidates.map(\.length).max() else {
+            if allowExplicitProfileFallback,
+               let primary = profiles.first {
+                let prefix = primary.profile.teamID + "."
+                let applicationID = primary.profile.applicationIdentifier
+
+                if applicationID.hasPrefix(prefix),
+                   applicationID.count > prefix.count,
+                   !applicationID.contains("*") {
+                    return 0
+                }
+            }
+
+            throw IPASigningError.invalidCredentials
+        }
+
+        let best = candidates.filter { $0.length == longest }
+
+        guard best.count == 1 else {
+            throw IPASigningError.duplicateProvisioningProfile
+        }
+
+        return best[0].index
+    }
+
     // KI_TVOS_COMPONENT_PROFILE_PREFLIGHT
     // Require exactly one profile for each app and extension.
     private static func validateComponentProfiles(
@@ -759,7 +833,7 @@ struct IPASigningCoordinator {
             components.append(candidate)
         }
 
-        var matchedIDs = Set<String>()
+        var matchedIndices = Set<Int>()
 
         for component in components {
             let infoURL = component.appendingPathComponent(
@@ -779,23 +853,18 @@ struct IPASigningCoordinator {
                 throw IPAWorkspaceError.invalidIPA
             }
 
-            let matches = profiles.filter {
-                $0.profile.applicationIdentifier ==
-                    $0.profile.teamID + "." + bundleID
-            }
+            let selectedIndex = try Self.selectProfileIndex(
+                profiles: profiles,
+                bundleID: bundleID,
+                allowExplicitProfileFallback:
+                    component.standardizedFileURL ==
+                    appURL.standardizedFileURL
+            )
 
-            guard matches.count == 1 else {
-                throw IPASigningError.invalidCredentials
-            }
-
-            guard matchedIDs.insert(
-                matches[0].profile.applicationIdentifier
-            ).inserted else {
-                throw IPASigningError.duplicateProvisioningProfile
-            }
+            matchedIndices.insert(selectedIndex)
         }
 
-        guard matchedIDs.count == profiles.count else {
+        guard matchedIndices.count == profiles.count else {
             throw IPASigningError.invalidCredentials
         }
     }

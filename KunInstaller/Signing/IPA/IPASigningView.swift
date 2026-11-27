@@ -7,6 +7,11 @@ struct IPASigningView: View {
     // Notify the existing installer after successful signing.
     let onSignedIPAReady: (URL) -> Bool
 
+    // KI_APP_LIBRARY_HANDOFF
+    var initialIPAURL: URL? = nil
+    var onInitialIPAImported: ((URL) -> Void)? = nil
+    var onSigningStateChanged: ((Bool) -> Void)? = nil
+
     // KI_SIGNING_INSTALL_CONTROLS
     let installationStatus: String
     let installationDetail: String
@@ -29,6 +34,7 @@ struct IPASigningView: View {
     @State private var isSigning = false
     @State private var hasSignedWorkspace = false
     @State private var signingViewVisible = true
+    @State private var lastHandledInitialIPAURL: URL?
 
     var body: some View {
         Form {
@@ -195,6 +201,13 @@ struct IPASigningView: View {
         }
         .onAppear {
             signingViewVisible = true
+            importInitialIPAIfNeeded()
+        }
+        .onChange(of: initialIPAURL) { _, _ in
+            importInitialIPAIfNeeded()
+        }
+        .onChange(of: isSigning) { _, signing in
+            onSigningStateChanged?(signing)
         }
         .onDisappear {
             signingViewVisible = false
@@ -324,6 +337,18 @@ struct IPASigningView: View {
         }
     }
 
+    // KI_APP_LIBRARY_INITIAL_IMPORT
+    private func importInitialIPAIfNeeded() {
+        guard let initialIPAURL,
+              lastHandledInitialIPAURL?.standardizedFileURL !=
+                initialIPAURL.standardizedFileURL else {
+            return
+        }
+
+        lastHandledInitialIPAURL = initialIPAURL
+        importIPA(.success([initialIPAURL]))
+    }
+
     private func importIPA(
         _ result: Result<[URL], Error>
     ) {
@@ -358,6 +383,10 @@ struct IPASigningView: View {
             message = "IPA imported into the signing workspace."
             isError = false
 
+            if initialIPAURL?.standardizedFileURL ==
+                url.standardizedFileURL {
+                onInitialIPAImported?(url)
+            }
         } catch {
             message = "Unable to import IPA: "
                 + error.localizedDescription

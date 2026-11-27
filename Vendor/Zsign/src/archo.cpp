@@ -371,11 +371,21 @@ static bool KI_BuildComponentEntitlements(
         compatible = bundleID.compare(0, base.size(), base) == 0;
     }
 
-    if (!compatible) {
+    const bool explicitProfileFallback =
+        !compatible &&
+        !pattern.empty() &&
+        pattern.find('*') == string::npos;
+
+    if (!compatible && !explicitProfileFallback) {
         return false;
     }
 
-    entitlements["application-identifier"] = applicationID;
+    const string& signingApplicationID =
+        explicitProfileFallback
+            ? allowedApplicationID
+            : applicationID;
+
+    entitlements["application-identifier"] = signingApplicationID;
     entitlements["com.apple.developer.team-identifier"] = teamID;
 
     jvalue& groups = entitlements["keychain-access-groups"];
@@ -384,7 +394,8 @@ static bool KI_BuildComponentEntitlements(
         for (size_t i = 0; i < groups.size(); i++) {
             const string group = groups[i].as_cstr();
 
-            if (group == teamID + ".*") {
+            if (!explicitProfileFallback &&
+                group == teamID + ".*") {
                 groups[i] = applicationID;
             }
         }

@@ -477,7 +477,9 @@ bool ZBundle::SignNode(jvalue& jvNode)
 
 		if (isApp || isExtension) {
 			ZSignAsset* matchedAsset = nullptr;
-			size_t matchCount = 0;
+
+			// Prefer exact application identifier matches.
+			size_t exactMatches = 0;
 
 			for (auto& asset : *m_pSignAssets) {
 				const string expectedID =
@@ -485,11 +487,119 @@ bool ZBundle::SignNode(jvalue& jvNode)
 
 				if (asset.m_strApplicationId == expectedID) {
 					matchedAsset = &asset;
-					++matchCount;
+					++exactMatches;
 				}
 			}
 
-			if (matchCount != 1 || matchedAsset == nullptr) {
+			if (exactMatches > 1) {
+				ZLog::ErrorV(
+					">>> Ambiguous exact profile: %s\n",
+					strBundleId.c_str()
+				);
+				return false;
+			}
+
+			// KI_PROFILE_DIAGNOSTICS
+			ZLog::PrintV(
+				"KI_PROFILE_DIAG: folder=%s bundle=%s assets=%zu root=%d\\n",
+				strFolder.c_str(),
+				strBundleId.c_str(),
+				m_pSignAssets->size(),
+				isRoot ? 1 : 0
+			);
+
+			for (auto& asset : *m_pSignAssets) {
+				ZLog::PrintV(
+					"KI_PROFILE_DIAG: team=[%s] appID=[%s] expected=[%s]\\n",
+					asset.m_strTeamId.c_str(),
+					asset.m_strApplicationId.c_str(),
+					(asset.m_strTeamId + "." + strBundleId).c_str()
+				);
+			}
+
+			// Fall back to the longest compatible wildcard.
+			if (exactMatches == 0) {
+				matchedAsset = nullptr;
+				size_t bestPrefixLength = 0;
+				size_t wildcardMatches = 0;
+
+				for (auto& asset : *m_pSignAssets) {
+					const string teamPrefix =
+						asset.m_strTeamId + ".";
+
+					const string& profileID =
+						asset.m_strApplicationId;
+
+					if (profileID.compare(
+						0, teamPrefix.size(), teamPrefix
+					) != 0) {
+						continue;
+					}
+
+					const string pattern =
+						profileID.substr(teamPrefix.size());
+
+					string allowedPrefix;
+
+					if (pattern == "*") {
+						allowedPrefix = "";
+					} else if (
+						pattern.size() > 2 &&
+						pattern.compare(
+							pattern.size() - 2, 2, ".*"
+						) == 0
+					) {
+						allowedPrefix =
+							pattern.substr(0, pattern.size() - 1);
+					} else {
+						continue;
+					}
+
+					if (strBundleId.compare(
+						0, allowedPrefix.size(), allowedPrefix
+					) != 0 ||
+						strBundleId.size() <= allowedPrefix.size()) {
+						continue;
+					}
+
+					if (wildcardMatches == 0 ||
+						allowedPrefix.size() > bestPrefixLength) {
+						bestPrefixLength = allowedPrefix.size();
+						matchedAsset = &asset;
+						wildcardMatches = 1;
+					} else if (
+						allowedPrefix.size() == bestPrefixLength
+					) {
+						++wildcardMatches;
+					}
+				}
+
+				if (wildcardMatches == 0 &&
+					isRoot &&
+					!m_pSignAssets->empty()) {
+					ZSignAsset* primaryAsset =
+						&m_pSignAssets->front();
+					const string teamPrefix =
+						primaryAsset->m_strTeamId + ".";
+					const string& profileID =
+						primaryAsset->m_strApplicationId;
+					if (profileID.compare(
+							0, teamPrefix.size(), teamPrefix
+						) == 0 &&
+						profileID.size() > teamPrefix.size() &&
+						profileID.find('*') == string::npos) {
+						matchedAsset = primaryAsset;
+						ZLog::PrintV(
+							">>> Using primary explicit profile App ID %s for root bundle %s; preserving original bundle ID.\\n",
+							profileID.c_str(), strBundleId.c_str()
+						);
+					}
+				} else if (wildcardMatches != 1) {
+					matchedAsset = nullptr;
+				}
+			}
+
+			if (matchedAsset == nullptr) {
 				ZLog::ErrorV(
 					">>> Missing or ambiguous profile: %s\n",
 					strBundleId.c_str()
