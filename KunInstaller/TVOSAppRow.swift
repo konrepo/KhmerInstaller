@@ -22,7 +22,7 @@ struct TVOSAppRow: View {
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
             .frame(width: 100, height: 60)
-            .background(.quaternary)
+            .background(.clear)
             .clipShape(RoundedRectangle(cornerRadius: 10))
 
             VStack(alignment: .leading, spacing: 6) {
