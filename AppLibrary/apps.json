@@ -97,8 +97,8 @@
       "name": "MuTube",
       "version": "4.54.01",
       "category": "Entertainment",
-      "source": "File Garden",
-      "sourceURL": null,
+      "source": "GitHub Releases",
+      "sourceURL": "https://github.com/Exaphis/mutube",
       "iconURL": "https://raw.githubusercontent.com/konrepo/KhmerInstaller/main/AppLibrary/Icons/MuTube.png",
       "variants": [
         {
@@ -109,8 +109,8 @@
         }
       ],
       "developer": {
-        "name": "Not listed",
-        "url": null
+        "name": "Exaphis",
+        "url": "https://github.com/Exaphis/mutube"
       }
     },
     {
