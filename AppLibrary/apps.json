@@ -5,7 +5,6 @@
     {
       "id": "vortx",
       "name": "VortX",
-      "description": "A native streaming application for Apple TV.",
       "version": "0.5.7",
       "category": "Entertainment",
       "source": "GitHub Releases",
@@ -24,12 +23,15 @@
           "fileName": "VortX-tvOS-lite-v0.5.7-ci.ipa",
           "ipaURL": "https://github.com/VortXTV/VortX/releases/download/v0.5.7/VortX-tvOS-lite-v0.5.7-ci.ipa"
         }
-      ]
+      ],
+      "developer": {
+        "name": "VortXTV",
+        "url": "https://github.com/VortXTV/VortX"
+      }
     },
     {
       "id": "stremio",
       "name": "Stremio",
-      "description": "Video streaming and media organization for Apple TV.",
       "version": "2.1.1b25",
       "category": "Entertainment",
       "source": "Official Download",
@@ -42,12 +44,15 @@
           "fileName": "stremio_tvOS.ipa",
           "ipaURL": "https://dl.strem.io/apple/2.1.1b25/tvos/stremio_tvOS.ipa"
         }
-      ]
+      ],
+      "developer": {
+        "name": "Stremio",
+        "url": "https://www.stremio.com"
+      }
     },
     {
       "id": "nuvio",
       "name": "Nuvio TV",
-      "description": "Media player application for Apple TV.",
       "version": "3.5.2",
       "category": "Entertainment",
       "source": "GitHub Releases",
@@ -60,12 +65,15 @@
           "fileName": "NuvioTV-3.5.2-unsigned-release.ipa",
           "ipaURL": "https://github.com/bobsupra/NuvioTVOS/releases/download/tvos-beta-3.5.2/NuvioTV-3.5.2-unsigned-release.ipa"
         }
-      ]
+      ],
+      "developer": {
+        "name": "bobsupra",
+        "url": "https://github.com/bobsupra/NuvioTVOS"
+      }
     },
     {
       "id": "orivio",
       "name": "Orivio TV",
-      "description": "Apple TV streaming application.",
       "version": "0.17",
       "category": "Entertainment",
       "source": "GitHub Releases",
@@ -78,12 +86,15 @@
           "fileName": "OrivioTV-V0.17.Sideloadly.ipa",
           "ipaURL": "https://github.com/prehakanson-art/OrivioTVAppleTV/releases/download/v0.17/OrivioTV-V0.17.Sideloadly.ipa"
         }
-      ]
+      ],
+      "developer": {
+        "name": "prehakanson-art",
+        "url": "https://github.com/prehakanson-art/OrivioTVAppleTV"
+      }
     },
     {
       "id": "mutube",
       "name": "MuTube",
-      "description": "Alternative video client for Apple TV.",
       "version": "4.54.01",
       "category": "Entertainment",
       "source": "File Garden",
@@ -96,12 +107,15 @@
           "fileName": "mutube_4.54.01_hdr.ipa",
           "ipaURL": "https://file.garden/aGfhNpTdVktTM-Pp/mutube_4.54.01_hdr.ipa"
         }
-      ]
+      ],
+      "developer": {
+        "name": "Not listed",
+        "url": null
+      }
     },
     {
       "id": "orbrisa",
       "name": "Orbrisa Web",
-      "description": "Web browser for Apple TV with web apps, favorites, and ad blocking.",
       "version": "1.1.0-beta.2",
       "category": "Browser",
       "source": "GitHub Releases",
@@ -113,6 +127,178 @@
           "name": "Standard",
           "fileName": "Orbrisa-1.1.0-Beta-2-unsigned.ipa",
           "ipaURL": "https://github.com/fdm96/Orbrisa/releases/download/v1.1.0-beta.2/Orbrisa-1.1.0-Beta-2-unsigned.ipa"
+        }
+      ],
+      "developer": {
+        "name": "fdm96",
+        "url": "https://github.com/fdm96/Orbrisa"
+      }
+    },
+    {
+      "id": "aeriotv",
+      "name": "AerioTV",
+      "version": "1.8.45",
+      "category": "Entertainment",
+      "source": "GitHub Releases",
+      "sourceURL": "https://github.com/jonzey231/AerioTV",
+      "iconURL": "https://raw.githubusercontent.com/konrepo/KhmerInstaller/main/AppLibrary/Icons/AerioTV.png",
+      "developer": {
+        "name": "jonzey231",
+        "url": "https://github.com/jonzey231/AerioTV"
+      },
+      "variants": [
+        {
+          "id": "standard",
+          "name": "Standard",
+          "fileName": "Aerio_tvOS_1.8.45.ipa",
+          "ipaURL": "https://github.com/jonzey231/AerioTV/releases/download/v1.8.45/Aerio_tvOS_1.8.45.ipa"
+        }
+      ]
+    },
+    {
+      "id": "cloudnow",
+      "name": "CloudNow",
+      "version": "2026.11.22-0786815",
+      "category": "Entertainment",
+      "source": "GitHub Releases",
+      "sourceURL": "https://github.com/owenselles/CloudNow",
+      "iconURL": "https://raw.githubusercontent.com/konrepo/KhmerInstaller/main/AppLibrary/Icons/CloudNow.png",
+      "developer": {
+        "name": "owenselles",
+        "url": "https://github.com/owenselles/CloudNow"
+      },
+      "variants": [
+        {
+          "id": "standard",
+          "name": "Standard",
+          "fileName": "CloudNow.ipa",
+          "ipaURL": "https://github.com/owenselles/CloudNow/releases/download/v2026.11.22-0786815/CloudNow.ipa"
+        }
+      ]
+    },
+    {
+      "id": "debrify",
+      "name": "Debrify",
+      "version": "0.11.3-alpha.1",
+      "category": "Entertainment",
+      "source": "GitHub Releases",
+      "sourceURL": "https://github.com/varunsalian/debrify",
+      "iconURL": "https://raw.githubusercontent.com/konrepo/KhmerInstaller/main/AppLibrary/Icons/Debrify.png",
+      "developer": {
+        "name": "varunsalian",
+        "url": "https://github.com/varunsalian/debrify"
+      },
+      "variants": [
+        {
+          "id": "standard",
+          "name": "Standard",
+          "fileName": "debrify-v0.11.3-alpha.1-tvos-unsigned.ipa",
+          "ipaURL": "https://github.com/varunsalian/debrify/releases/download/v0.11.3-alpha.1/debrify-v0.11.3-alpha.1-tvos-unsigned.ipa"
+        }
+      ]
+    },
+    {
+      "id": "infusepro",
+      "name": "InfusePro",
+      "version": "Patched",
+      "category": "Entertainment",
+      "source": "GitHub",
+      "sourceURL": "https://github.com/akorshun/tvos-sideload-apps",
+      "iconURL": "https://raw.githubusercontent.com/konrepo/KhmerInstaller/main/AppLibrary/Icons/InfusePro.png",
+      "developer": {
+        "name": "akorshun",
+        "url": "https://github.com/akorshun/tvos-sideload-apps"
+      },
+      "variants": [
+        {
+          "id": "standard",
+          "name": "Standard",
+          "fileName": "InfusePro8_tvOS_sideload_patched.ipa",
+          "ipaURL": "https://github.com/akorshun/tvos-sideload-apps/raw/master/InfusePro8_tvOS_sideload_patched.ipa"
+        }
+      ]
+    },
+    {
+      "id": "kodi",
+      "name": "Kodi",
+      "version": "22.30",
+      "category": "Entertainment",
+      "source": "GitHub Releases",
+      "sourceURL": "https://github.com/6ahd/Kodi-tvOS",
+      "iconURL": "https://raw.githubusercontent.com/konrepo/KhmerInstaller/main/AppLibrary/Icons/Kodi.png",
+      "developer": {
+        "name": "6ahd",
+        "url": "https://github.com/6ahd/Kodi-tvOS"
+      },
+      "variants": [
+        {
+          "id": "standard",
+          "name": "Standard",
+          "fileName": "Kodi-DexHub-v22.30-Aether7.62.1-unsigned-20261112-174859.ipa",
+          "ipaURL": "https://github.com/6ahd/Kodi-tvOS/releases/download/v22.30/Kodi-DexHub-v22.30-Aether7.62.1-unsigned-20261112-174859.ipa"
+        }
+      ]
+    },
+    {
+      "id": "nuviotv",
+      "name": "NuvioTV",
+      "version": "0.3.0-beta.26",
+      "category": "Entertainment",
+      "source": "GitHub Releases",
+      "sourceURL": "https://github.com/youngchris29-art/NuvioTV",
+      "iconURL": "https://raw.githubusercontent.com/konrepo/KhmerInstaller/main/AppLibrary/Icons/NuvioTV.png",
+      "developer": {
+        "name": "youngchris29-art",
+        "url": "https://github.com/youngchris29-art/NuvioTV"
+      },
+      "variants": [
+        {
+          "id": "standard",
+          "name": "Standard",
+          "fileName": "NuvioTV.ipa",
+          "ipaURL": "https://github.com/youngchris29-art/NuvioTV/releases/download/tvos-v0.3.0-beta.26/NuvioTV.ipa"
+        }
+      ]
+    },
+    {
+      "id": "rivulet",
+      "name": "Rivulet",
+      "version": "1.3.1-132",
+      "category": "Entertainment",
+      "source": "GitHub Releases",
+      "sourceURL": "https://github.com/l984-451/Rivulet",
+      "iconURL": "https://raw.githubusercontent.com/konrepo/KhmerInstaller/main/AppLibrary/Icons/Rivulet.png",
+      "developer": {
+        "name": "l984-451",
+        "url": "https://github.com/l984-451/Rivulet"
+      },
+      "variants": [
+        {
+          "id": "standard",
+          "name": "Standard",
+          "fileName": "Rivulet.ipa",
+          "ipaURL": "https://github.com/l984-451/Rivulet/releases/download/v1.3.1-132/Rivulet.ipa"
+        }
+      ]
+    },
+    {
+      "id": "twitchunblock",
+      "name": "TwitchUnblock",
+      "version": "Latest",
+      "category": "Entertainment",
+      "source": "GitHub Releases",
+      "sourceURL": "https://github.com/MXFia19/TwitchUnblock",
+      "iconURL": "https://raw.githubusercontent.com/konrepo/KhmerInstaller/main/AppLibrary/Icons/TwitchUnblock.png",
+      "developer": {
+        "name": "MXFia19",
+        "url": "https://github.com/MXFia19/TwitchUnblock"
+      },
+      "variants": [
+        {
+          "id": "standard",
+          "name": "Standard",
+          "fileName": "TwitchUnblock.ipa",
+          "ipaURL": "https://github.com/MXFia19/TwitchUnblock/releases/latest/download/TwitchUnblock.ipa"
         }
       ]
     }
