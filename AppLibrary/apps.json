@@ -32,7 +32,7 @@
     {
       "id": "stremio",
       "name": "Stremio",
-      "version": "2.1.1b25",
+      "version": "2.1.3b28",
       "category": "Entertainment",
       "source": "Official Download",
       "sourceURL": "https://www.stremio.com",
@@ -42,7 +42,7 @@
           "id": "standard",
           "name": "Standard",
           "fileName": "stremio_tvOS.ipa",
-          "ipaURL": "https://dl.strem.io/apple/2.1.1b25/tvos/stremio_tvOS.ipa"
+          "ipaURL": "https://dl.strem.io/apple/2.1.3b28/tvos/stremio_tvOS.ipa"
         }
       ],
       "developer": {
@@ -220,7 +220,7 @@
     },
     {
       "id": "kodi",
-      "name": "Kodi",
+      "name": "Unofficial Kodi",
       "version": "22.30",
       "category": "Entertainment",
       "source": "GitHub Releases",
