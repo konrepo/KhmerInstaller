@@ -220,6 +220,27 @@
     },
     {
       "id": "kodi",
+      "name": "Kodi",
+      "version": "21.30",
+      "category": "Entertainment",
+      "source": "Site",
+      "sourceURL": "https://kodiipa.com/kodi-tvos-ipa-file-download-for-apple-tv/",
+      "iconURL": "https://raw.githubusercontent.com/konrepo/KhmerInstaller/main/AppLibrary/Icons/Kodi.png",
+      "developer": {
+        "name": "kodiipa",
+        "url": "https://kodiipa.com/kodi-tvos-ipa-file-download-for-apple-tv/"
+      },
+      "variants": [
+        {
+          "id": "standard",
+          "name": "Standard",
+          "fileName": "org.xbmc.kodi-tvos_21.3-tvos.ipa",
+          "ipaURL": "https://1.uploadlinks.com/file/uploadlinks/org.xbmc.kodi-tvos_21.3-tvos.ipa"
+        }
+      ]
+    },    
+    {
+      "id": "kodi",
       "name": "Unofficial Kodi",
       "version": "22.30",
       "category": "Entertainment",
